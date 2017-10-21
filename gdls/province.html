@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 	<head>
 		<meta charset="UTF-8">
 		<title>全省涉粮企业分布图</title>
 		<style>
-			.scatter-map {
-				height: 400px;
+			.bs-callout-info {
+				border-left-color: #1b809e;
 			}
 			
-			.statics-char div {
-				width: 50%;
-				height: 400px;
+			.total-stat-orange {
+				border: 1px solid orange;
+			}
+			
+			.total-stat-orange h2 {
+				color: orange;
+			}
+			
+			.total-stat-green {
+				border: 1px solid green;
+			}
+			
+			.total-stat-green h2 {
+				color: green;
+			}
+			
+			.seperator {
+				margin: 20px;
+			}
+			
+			.form-control-feedback {
+				right: 15px !important;
+				line-height: 48px !important;
+				color: darkgrey;
+			}
+			
+			.enterprise-search {
+				width: 30px;
+				height: 30px;
+				position: absolute;
+				right: 16px;
+				z-index: 100;
+				cursor: pointer;
+				top: 10px;
 			}
 		</style>
 		<!-- Tell the browser to be responsive to screen width -->
@@ -28,108 +59,159 @@
 		<!-- Theme style -->
 		<link href="adminLTE/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
 
+		<link rel="stylesheet" type="text/css" href="adminLTE/plugins/datatables/jquery.dataTables.css" />
+		<link rel="stylesheet" type="text/css" href="adminLTE/plugins/datatables/dataTables.bootstrap.css" />
+
+		<!--<link rel="stylesheet" type="text/css" href="js/select2-3.5.4/select2.css" />-->
+		<link rel="stylesheet" type="text/css" href="adminlte/bower_components/select2/dist/css/select2.min.css" />
+
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	    <![endif]-->
 
 		<!-- Google Font -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body>
-		<ul id="myTab" class="nav nav-tabs">
-			<li class="active">
-				<a href="#company" data-toggle="tab">
-					企业
-				</a>
-			</li>
-			<li>
-				<a href="#storage" data-toggle="tab">库点</a>
-			</li>
-		</ul>
-		<div id="myTabContent" class="tab-content">
-			<div class="tab-pane fade in active" id="company">
-				<div class="scatter-map">
-
-				</div>
-				<div class="statics-char">
-					<div class="years" id="years_chart">
+		<div class="container">
+			<div class="col-xs-12">
+				<h3>仓储企业分布概览</h3>
+				<div class="col-xs-12">
+					<div class="bs-callout-info">
+						<h4>企业总量</h4>
 					</div>
-					<div class="levels">
-
+					<div class="row">
+						<div class="col-xs-3">
+							<div class="col-xs-11 total-stat-orange">
+								<p>已备案仓储企业</p>
+								<h2><div class="text-center">12332</div></h2>
+							</div>
+						</div>
+						<div class="col-xs-3">
+							<div class="col-xs-11 total-stat-green">
+								<p>省直属库</p>
+								<h2><div class="text-center">8</div></h2>
+							</div>
+						</div>
+						<div class="col-xs-3">
+							<div class="col-xs-11 total-stat-green">
+								<p>市直属库</p>
+								<h2><div class="text-center">123</div></h2>
+							</div>
+						</div>
+						<div class="col-xs-3">
+							<div class="col-xs-11 total-stat-green">
+								<p>县直属库</p>
+								<h2><div class="text-center">123</div></h2>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="tab-pane fade" id="storage">
-				<p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+				<div class="seperator clearfix"></div>
+				<div class="col-xs-12">
+					<ul id="myTab" class="nav nav-tabs">
+						<li class="active">
+							<a href="#company" data-toggle="tab">
+								企业分布
+							</a>
+						</li>
+						<li>
+							<a href="#storage" data-toggle="tab">企业分析</a>
+						</li>
+						<form class="navbar-form navbar-right">
+							<div class="form-group">
+								<input type="text" style="width: 300px;" class="form-control" placeholder="请输入企业名称、库点名称或工商号">
+								<span class="fa fa-search fa-2x form-control-feedback"></span>
+								<span class="enterprise-search"></span>
+							</div>
+						</form>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div class="breadcrumb">
+							<form class="form-inline">
+								<div class="form-group">
+									<div class="radio">
+										<label>
+										    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+										    直属库
+										  </label>
+									</div>
+									<div class="radio">
+										<label>
+										    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+										    已备案仓储企业
+										  </label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label" style="line-height: 34px;">业务类型：</label>
+									<div class="col-sm-9">
+										<select name="sel-03" id="sel-03" class="select2-original" multiple>
+											<option value="all">全部</option>
+											<option value="cb">储备</option>
+											<option value="sg">收购</option>
+											<option value="jg">加工</option>
+											<option value="xs">销售</option>
+											<option value="ys">运输</option>
+											<option value="zz">中转</option>
+											<option value="jck">进出口</option>
+											<option value="qt">其他</option>
+										</select>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-primary">筛选</button>
+							</form>
+						</div>
+						<div class="tab-pane fade in active" id="company">
+							<div class="">
+								这里有个地图
+							</div>
+						</div>
+						<div class="tab-pane fade" id="storage">
+							<p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script src="adminLTE/plugins/jQuery/jQuery-2.2.0.js" type="text/javascript"></script>
 
 		<!-- Bootstrap 3.3.2 JS -->
 		<script src="adminLTE/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-		<!-- chart -->
-		<script src="js/echarts.simple.min.js" type="text/javascript"></script>
-		<script>
-			yearData = []
-			// 基于准备好的dom，初始化echarts图表
-			var yearChart = echarts.init(document.getElementById('years_chart'));
 
-			yearOption = {
-				title: {
-					text: '各粮食品种年份存量'
-				},
-				tooltip: {
-					trigger: 'axis',
-					axisPointer: { // 坐标轴指示器，坐标轴触发有效
-						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-					}
-				},
-				grid: {
-					left: '3%',
-					right: '4%',
-					bottom: '3%',
-					containLabel: true
-				},
-				xAxis: [{
-					type: 'category',
-					data: ['2014', '2015', '2016', '2017']
-				}],
-				yAxis: [{
-					type: 'value'
-				}],
-				series: [{
-						name: '水稻',
-						type: 'bar',
-						stack: '存量',
-						data: [320, 332, 301, 334]
-					},
-					{
-						name: '玉米',
-						type: 'bar',
-						stack: '存量',
-						data: [120, 132, 101, 134]
-					},
-					{
-						name: '大豆',
-						type: 'bar',
-						stack: '存量',
-						data: [220, 182, 191, 234]
-					},
-					{
-						name: '其他',
-						type: 'bar',
-						stack: '存量',
-						data: [150, 232, 201, 154]
-					}
-				]
-			};
+		<!--<script src="js/select2-3.5.4/select2.min.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="adminlte/bower_components/select2/dist/js/select2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/select2.multi-checkboxes.js.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.enterprise-search').click(function() {
+					console.log(123)
+				});
 
-			// 为echarts对象加载数据 
-			yearChart.setOption(yearOption);
+				$('.select2-multiple').select2MultiCheckboxes({
+					placeholder: "Choose multiple elements",
+					width: "auto"
+				})
+				$('.select2-multiple2').select2MultiCheckboxes({
+					templateSelection: function(selected, total) {
+						return "Selected " + selected.length + " of " + total;
+					}
+				})
+				$('.select2-original').select2({
+					width: "300px"
+				});
+				var selectedItems = [];
+				var allOptions = $(".select2-original option");
+				allOptions.each(function() {
+					selectedItems.push($(this).val());
+				});
+				$(".select2-original").val(selectedItems).trigger("change");
+
+			});
 		</script>
 	</body>
 
